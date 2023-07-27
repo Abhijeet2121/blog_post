@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, abort
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,11 +9,12 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
+import os 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = 'SECRET_KEY'
 ckeditor = CKEditor(app)
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap5(app)
 gravatar = Gravatar(app,
                     size=20, 
                     rating='g',
@@ -24,8 +25,8 @@ gravatar = Gravatar(app,
                     base_url=None)
 
 ##CONNECT TO DB
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -75,8 +76,8 @@ class Comment(db.Model):
     comment_author = relationship('User', back_populates='comments')
 
 
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 def admin_only(f):
