@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, abort
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,7 +14,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 ckeditor = CKEditor(app)
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap5(app)
 gravatar = Gravatar(app,
                     size=20, 
                     rating='g',
@@ -26,7 +26,7 @@ gravatar = Gravatar(app,
 
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -99,7 +99,7 @@ def get_all_posts():
 def register():
     form = RegisterForm()
     if form.validate_on_submit() and request.method == "POST":
-        if db.session.execute(db.select(User).filter_by(email=request.form.get('email'))).first():
+        if db.session.execute(db.select(User).filter_by(email=request.form.get('email'))).scalar():
             flash("You have already signed up, Try login Instead.")
             return redirect(url_for('login'))
         
