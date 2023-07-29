@@ -99,7 +99,7 @@ def get_all_posts():
 def register():
     form = RegisterForm()
     if form.validate_on_submit() and request.method == "POST":
-        if db.session.execute(db.select(User).filter_by(email=request.form.get('email'))).scalar():
+        if User.query.filter_by(email=form.email.data).first():
             flash("You have already signed up, Try login Instead.")
             return redirect(url_for('login'))
         
@@ -110,12 +110,14 @@ def register():
         )
 
         new_user = User(
-            name=request.form.get('name'),
-            email= request.form.get('email'),
+            name=form.name.data,
+            email= form.email.data,
             password = hash_and_salted_password
         )
         db.session.add(new_user)
         db.session.commit()
+
+        login_user(new_user)
         return redirect(url_for('get_all_posts'))
     return render_template("register.html", form=form, current_user=current_user)
 
