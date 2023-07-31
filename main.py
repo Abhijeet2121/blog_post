@@ -201,7 +201,7 @@ def edit_post(post_id):
         body=post.body
     )
     if edit_form.validate_on_submit():
-        post.author = edit_form.author.data
+        post.author.name = edit_form.author.data
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
         post.img_url = edit_form.img_url.data
