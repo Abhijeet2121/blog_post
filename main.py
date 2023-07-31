@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, abort
-from flask_bootstrap import Bootstrap5
+from flask_bootstrap import Bootstrap4
 from flask_ckeditor import CKEditor
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,7 +14,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
-bootstrap = Bootstrap5(app)
+bootstrap = Bootstrap4(app)
 gravatar = Gravatar(app,
                     size=20, 
                     rating='g',
@@ -76,8 +76,8 @@ class Comment(db.Model):
     comment_author = relationship('User', back_populates='comments')
 
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 
 def admin_only(f):
